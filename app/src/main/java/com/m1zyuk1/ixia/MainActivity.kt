@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     private val RESULT_CAMERA = 1001
     private val REQUEST_PERMISSION = 1002
+    private val RESULT_POST = 1003
     private var cameraUri: Uri? = null
     private var filePath: String? = null
 
@@ -61,10 +62,11 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == RESULT_CAMERA) {
 
             if (cameraUri != null) {
-                binding.imageView.setImageURI(cameraUri)
+//                binding.imageView.setImageURI(cameraUri)
                 if (filePath != null) {
                     registerDatabase(filePath!!)
                 }
+                startActivityForResult(CreatePostActivity.makeIntent(this, cameraUri.toString()), RESULT_POST)
             } else {
                 Log.d("debug", "cameraUri == null")
             }
