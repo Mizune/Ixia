@@ -32,6 +32,6 @@ class CreatePostActivity : AppCompatActivity() {
         var url = intent.getStringExtra(IMAGE_URL) ?: ""
         binding.imageView.setImageURI(Uri.parse(url))
         Toast.makeText(this,"Camera Uri = " + url ,Toast.LENGTH_SHORT).show()
-        supportActionBar?.title = "投稿する"
+        supportActionBar?.title = "保存内容"
     }
 }
