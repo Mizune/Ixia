@@ -29,6 +29,8 @@ import android.support.annotation.NonNull
 import android.Manifest.permission
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.support.v4.app.ActivityCompat
+import com.m1zyuk1.ixia.model.Post
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,11 +41,31 @@ class MainActivity : AppCompatActivity() {
     private val RESULT_POST = 1003
     private var cameraUri: Uri? = null
     private var filePath: String? = null
+    private lateinit var postList: List<Post>
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUi()
+        setupPost()
+    }
+
+    private fun setupPost() {
+        // load data or create new one
+        postList = createDummyData()
+    }
+
+    private fun createDummyData(): List<Post> {
+        var list = ArrayList<Post>()
+
+        var post = Post("Title", "url", Date(), "Comment")
+
+        list.add(post)
+        list.add(post)
+        list.add(post)
+        list.add(post)
+        return list
     }
 
     private fun setupUi() {
