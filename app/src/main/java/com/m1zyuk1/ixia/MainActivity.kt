@@ -28,8 +28,10 @@ import android.content.pm.PackageManager
 import android.support.annotation.NonNull
 import android.Manifest.permission
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.content.Context
 import android.support.v4.app.ActivityCompat
 import com.m1zyuk1.ixia.model.Post
+import com.m1zyuk1.ixia.model.SerializeUtil
 import kotlin.collections.ArrayList
 
 
@@ -39,25 +41,36 @@ class MainActivity : AppCompatActivity() {
     private val RESULT_CAMERA = 1001
     private val REQUEST_PERMISSION = 1002
     private val RESULT_POST = 1003
+
+    private val POST_PREF = "post_pref"
+    private val POST_STRING = "post_pref"
+
     private var cameraUri: Uri? = null
     private var filePath: String? = null
-    private lateinit var postList: List<Post>
-
+    private lateinit var postList: MutableList<Post>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUi()
-        setupPost()
+        initializePostdata()
     }
 
-    private fun setupPost() {
+    private fun initializePostdata() {
         // load data or create new one
-        postList = createDummyData()
+        val data = getSharedPreferences(POST_PREF, Context.MODE_PRIVATE)
+        val postsRaw = data.getString(POST_STRING, "")
+
+        postList = if (postsRaw.isEmpty()) {
+            createDummyData()
+            // mutableListOf()
+        } else {
+            SerializeUtil.toSchedules(postsRaw)
+        }
     }
 
-    private fun createDummyData(): List<Post> {
-        var list = ArrayList<Post>()
+    private fun createDummyData(): MutableList<Post> {
+        var list: MutableList<Post> = mutableListOf()
 
         var post = Post("Title", "url", Date(), "Comment")
 
@@ -81,16 +94,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RESULT_CAMERA) {
-
-            if (cameraUri != null) {
+        when (requestCode) {
+            RESULT_CAMERA -> {
+                if (cameraUri != null) {
 //                binding.imageView.setImageURI(cameraUri)
-                if (filePath != null) {
-                    registerDatabase(filePath!!)
+                    if (filePath != null) {
+                        registerDatabase(filePath!!)
+                    }
+                    startActivityForResult(CreatePostActivity.makeIntent(this, cameraUri.toString()), RESULT_POST)
+                } else {
+                    Log.d("debug", "cameraUri == null")
                 }
-                startActivityForResult(CreatePostActivity.makeIntent(this, cameraUri.toString()), RESULT_POST)
-            } else {
-                Log.d("debug", "cameraUri == null")
+            }
+
+            RESULT_POST -> {
+                val data = intent
+                val post = data.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
+                postList.add(post)
             }
         }
     }
@@ -173,5 +193,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Doesn't work", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun savePosts() {
+        val data = getSharedPreferences(POST_PREF, Context.MODE_PRIVATE)
+        val convertedPosts = SerializeUtil.toBase64(postList)
+        val editor = data.edit()
+        editor.putString(POST_STRING, convertedPosts)
+        editor.apply()
     }
 }

@@ -19,7 +19,7 @@ class CreatePostActivity : AppCompatActivity() {
 
     companion object MakeIntent {
         val IMAGE_URL = "image_url"
-        private val RESPONSE_POST = "response_post"
+        val RESPONSE_POST = "response_post"
         fun makeIntent(context: Context, imageUrl: String): Intent {
             var intent = Intent(context, CreatePostActivity::class.java)
             intent.putExtra(IMAGE_URL, imageUrl)
