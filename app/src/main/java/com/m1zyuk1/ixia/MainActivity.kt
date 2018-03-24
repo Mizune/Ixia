@@ -30,8 +30,11 @@ import android.Manifest.permission
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.support.v4.app.ActivityCompat
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import com.m1zyuk1.ixia.model.Post
 import com.m1zyuk1.ixia.model.SerializeUtil
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlin.collections.ArrayList
 
 
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupUi()
         initializePostdata()
+        setupRecyclerView()
     }
 
     private fun initializePostdata() {
@@ -67,6 +71,16 @@ class MainActivity : AppCompatActivity() {
         } else {
             SerializeUtil.toSchedules(postsRaw)
         }
+    }
+
+    private fun setupRecyclerView(){
+        val adapter = GridRecycleViewAdapter(postList)
+        val gridManager = GridLayoutManager(this,3)
+
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = gridManager
+        binding.recyclerView.adapter = adapter
+
     }
 
     private fun createDummyData(): MutableList<Post> {
@@ -111,6 +125,7 @@ class MainActivity : AppCompatActivity() {
                 val data = intent
                 val post = data.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
                 postList.add(post)
+                savePosts()
             }
         }
     }
