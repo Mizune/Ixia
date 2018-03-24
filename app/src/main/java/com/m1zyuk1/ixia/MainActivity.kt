@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity() {
         val postsRaw = data.getString(POST_STRING, "")
 
         postList = if (postsRaw.isEmpty()) {
-            createDummyData()
-            // mutableListOf()
+            // createDummyData()
+            mutableListOf()
         } else {
             SerializeUtil.toSchedules(postsRaw)
         }
@@ -111,7 +111,6 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             RESULT_CAMERA -> {
                 if (cameraUri != null) {
-//                binding.imageView.setImageURI(cameraUri)
                     if (filePath != null) {
                         registerDatabase(filePath!!)
                     }
@@ -122,8 +121,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             RESULT_POST -> {
-                val data = intent
-                val post = data.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
+                var data = intent
+                var post = data.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
                 postList.add(post)
                 savePosts()
             }

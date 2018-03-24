@@ -1,5 +1,6 @@
 package com.m1zyuk1.ixia
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -44,8 +45,10 @@ class CreatePostActivity : AppCompatActivity() {
                 var intent = Intent()
                 intent.putExtra(RESPONSE_POST,post)
                 setResult(RESULT_OK, intent)
-                finish()
+            } else {
+                setResult(RESULT_CANCELED)
             }
+            finish()
         }
     }
 
