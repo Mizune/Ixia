@@ -54,6 +54,7 @@ class CreatePostActivity : AppCompatActivity() {
                 AlertDialog.Builder(this)
                         .setTitle("エラー")
                         .setMessage("不十分な内容があります")
+                        .setPositiveButton("OK", null)
                         .show()
                 setResult(RESULT_CANCELED)
                 // finishせずにerror dialogでは
@@ -63,7 +64,7 @@ class CreatePostActivity : AppCompatActivity() {
 
     private fun isValid(): Boolean {
 
-        if (binding.postTitle.toString().isEmpty()) {
+        if (binding.postTitle.text.isEmpty()) {
             return false
         }
         return true
