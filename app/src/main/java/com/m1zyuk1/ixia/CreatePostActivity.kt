@@ -2,11 +2,13 @@ package com.m1zyuk1.ixia
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.m1zyuk1.ixia.databinding.ActivityCreatePostBinding
 import com.m1zyuk1.ixia.model.Post
@@ -32,6 +34,7 @@ class CreatePostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post)
         setupUi()
+        setActionBar()
     }
 
     private fun setupUi() {
@@ -45,10 +48,11 @@ class CreatePostActivity : AppCompatActivity() {
                 var intent = Intent()
                 intent.putExtra(RESPONSE_POST,post)
                 setResult(RESULT_OK, intent)
+                finish()
             } else {
                 setResult(RESULT_CANCELED)
+                // finishせずにerror dialogでは
             }
-            finish()
         }
     }
 
@@ -58,5 +62,26 @@ class CreatePostActivity : AppCompatActivity() {
             return false
         }
         return true
+    }
+
+    private fun setActionBar(){
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        if (binding.postTitle.text.isEmpty() && binding.postComment.text.isEmpty()){
+            finish()
+        } else {
+            AlertDialog.Builder(this)
+                    .setTitle("戻る")
+                    .setMessage("内容を破棄して戻ってもよろしいですか?")
+                    .setPositiveButton("OK") { dialog, which ->
+                        finish()
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+        }
+        return super.onSupportNavigateUp()
     }
 }

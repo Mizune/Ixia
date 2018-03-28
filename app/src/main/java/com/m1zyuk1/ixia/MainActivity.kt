@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = gridManager
         binding.recyclerView.adapter = adapter
-
+        binding.recyclerView.addItemDecoration(GridDecoration(20))
+        binding.recyclerView.clipToPadding = true
     }
 
     private fun createDummyData(): MutableList<Post> {
@@ -121,10 +122,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             RESULT_POST -> {
-                var data = intent
-                var post = data.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
-                postList.add(post)
-                savePosts()
+                if (resultCode == RESULT_OK){
+                    var post = data?.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
+                    postList.add(post)
+                    savePosts()
+                }
             }
         }
     }
