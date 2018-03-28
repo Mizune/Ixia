@@ -1,6 +1,7 @@
 package com.m1zyuk1.ixia
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -43,34 +44,38 @@ class CreatePostActivity : AppCompatActivity() {
         Toast.makeText(this, "Camera Uri = " + url, Toast.LENGTH_SHORT).show()
         supportActionBar?.title = "保存内容"
         binding.submitButton.setOnClickListener {
-            if (isValid()){
+            if (isValid()) {
                 var post = Post(binding.postTitle.text.toString(), url, Date(), binding.postComment.toString())
                 var intent = Intent()
-                intent.putExtra(RESPONSE_POST,post)
+                intent.putExtra(RESPONSE_POST, post)
                 setResult(RESULT_OK, intent)
                 finish()
             } else {
+                AlertDialog.Builder(this)
+                        .setTitle("エラー")
+                        .setMessage("不十分な内容があります")
+                        .show()
                 setResult(RESULT_CANCELED)
                 // finishせずにerror dialogでは
             }
         }
     }
 
-    private fun isValid():Boolean{
+    private fun isValid(): Boolean {
 
-        if (binding.postTitle.toString().isEmpty()){
+        if (binding.postTitle.toString().isEmpty()) {
             return false
         }
         return true
     }
 
-    private fun setActionBar(){
+    private fun setActionBar() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (binding.postTitle.text.isEmpty() && binding.postComment.text.isEmpty()){
+        if (binding.postTitle.text.isEmpty() && binding.postComment.text.isEmpty()) {
             finish()
         } else {
             AlertDialog.Builder(this)
