@@ -7,15 +7,27 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/drawing_detail_activity_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/detail_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:text="Title"/>
+        <ImageView
+            android:id="@+id/detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/detail_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="comment"/>
+
+    </LinearLayout>
 
 </layout>

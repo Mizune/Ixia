@@ -45,7 +45,7 @@ class CreatePostActivity : AppCompatActivity() {
         supportActionBar?.title = "保存内容"
         binding.submitButton.setOnClickListener {
             if (isValid()) {
-                var post = Post(binding.postTitle.text.toString(), url, Date(), binding.postComment.toString())
+                var post = Post(binding.postTitle.text.toString(), url, Date(), binding.postComment.text.toString())
                 var intent = Intent()
                 intent.putExtra(RESPONSE_POST, post)
                 setResult(RESULT_OK, intent)

@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
             RESULT_POST -> {
                 if (resultCode == RESULT_OK){
                     var post = data?.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
-                    postList.add(post)
+                    postList.add(0,post)
                     savePosts()
                 }
             }

@@ -3,6 +3,7 @@ package com.m1zyuk1.ixia
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -26,6 +27,14 @@ class DrawingDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_drawing_detail)
+        setupUi()
         Toast.makeText(this,(intent.getSerializableExtra(POST_DATA) as Post).title, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setupUi(){
+        val post = intent.getSerializableExtra(POST_DATA) as Post
+        binding.detailTitle.text = post.title
+        binding.detailImage.setImageURI(Uri.parse(post.imagePath))
+        binding.detailComment.text = post.comment
     }
 }
