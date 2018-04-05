@@ -6,6 +6,8 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.m1zyuk1.ixia.databinding.ActivityCreatePostBinding
 import com.m1zyuk1.ixia.databinding.ActivityDrawingDetailBinding
@@ -36,5 +38,22 @@ class DrawingDetailActivity : AppCompatActivity() {
         binding.detailTitle.text = post.title
         binding.detailImage.setImageURI(Uri.parse(post.imagePath))
         binding.detailComment.text = post.comment
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_drawing_detail, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.remove_button -> {
+                Toast.makeText(applicationContext, "Select remove button.", Toast.LENGTH_SHORT).show()
+                // デリート処理
+                finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }
