@@ -16,10 +16,10 @@ public class GridRecycleViewAdapter(private val list: List<Post>) : RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val inflate = LayoutInflater.from(parent.context).inflate(R.layout.post_griditem, parent, false)
         val viewHolder = GridViewHolder(inflate)
-        inflate.setOnClickListener{
+        inflate.setOnClickListener {
             val position = viewHolder.adapterPosition
             val post = list.get(position)
-            parent.context.startActivity(DrawingDetailActivity.makeIntent(parent.context,post))
+            parent.context.startActivity(DrawingDetailActivity.makeIntent(parent.context, post, position))
         }
         return viewHolder
     }

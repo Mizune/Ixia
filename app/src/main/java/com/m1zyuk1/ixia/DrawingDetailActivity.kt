@@ -1,5 +1,6 @@
 package com.m1zyuk1.ixia
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -9,7 +10,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import com.m1zyuk1.ixia.databinding.ActivityCreatePostBinding
 import com.m1zyuk1.ixia.databinding.ActivityDrawingDetailBinding
 import com.m1zyuk1.ixia.model.Post
 
@@ -19,9 +19,11 @@ class DrawingDetailActivity : AppCompatActivity() {
 
     companion object MakeIntent {
         val POST_DATA = "post_data"
-        fun makeIntent(context: Context, post: Post): Intent {
+        val POST_INDEX = "post_index"
+        fun makeIntent(context: Context, post: Post, index: Number): Intent {
             var intent = Intent(context, DrawingDetailActivity::class.java)
             intent.putExtra(POST_DATA, post)
+            intent.putExtra(POST_INDEX, index)
             return intent
         }
     }
@@ -30,10 +32,10 @@ class DrawingDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_drawing_detail)
         setupUi()
-        Toast.makeText(this,(intent.getSerializableExtra(POST_DATA) as Post).title, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, (intent.getSerializableExtra(POST_DATA) as Post).title, Toast.LENGTH_SHORT).show()
     }
 
-    private fun setupUi(){
+    private fun setupUi() {
         val post = intent.getSerializableExtra(POST_DATA) as Post
         binding.detailTitle.text = post.title
         binding.detailImage.setImageURI(Uri.parse(post.imagePath))
@@ -50,7 +52,8 @@ class DrawingDetailActivity : AppCompatActivity() {
             R.id.remove_button -> {
                 Toast.makeText(applicationContext, "Select remove button.", Toast.LENGTH_SHORT).show()
                 // デリート処理
-                finish()
+                // confirm
+                startActivity(MainActivity.makeIntent(this, intent.extras.getInt(POST_INDEX)))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

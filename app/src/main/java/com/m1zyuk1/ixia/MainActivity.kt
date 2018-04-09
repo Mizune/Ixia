@@ -29,6 +29,7 @@ import android.support.annotation.NonNull
 import android.Manifest.permission
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
+import android.support.annotation.IntegerRes
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -52,12 +53,32 @@ class MainActivity : AppCompatActivity() {
     private var filePath: String? = null
     private lateinit var postList: MutableList<Post>
 
+    companion object {
+        val DELETE_INDEX = "delete_index"
+        fun makeIntent(context: Context, deleteIndex: Number): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(DELETE_INDEX, deleteIndex)
+            return intent
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUi()
         initializePostdata()
+        deletePostdata()
         setupRecyclerView()
+    }
+
+    private fun deletePostdata() {
+        if (intent.extras != null) {
+            val index = intent.extras.getInt(DELETE_INDEX, -1)
+            if (index != -1) {
+                postList.removeAt(index)
+                savePosts()
+            }
+        }
     }
 
     private fun initializePostdata() {
@@ -73,9 +94,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
         val adapter = GridRecycleViewAdapter(postList)
-        val gridManager = GridLayoutManager(this,3)
+        val gridManager = GridLayoutManager(this, 3)
 
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = gridManager
@@ -122,9 +143,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             RESULT_POST -> {
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     var post = data?.getSerializableExtra(CreatePostActivity.RESPONSE_POST) as Post
-                    postList.add(0,post)
+                    postList.add(0, post)
                     savePosts()
                 }
             }
